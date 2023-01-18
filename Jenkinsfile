@@ -2,31 +2,28 @@ pipeline {
     agent any
     
     environment {
-        asdf = 'QWER'
-	awesomeVersion = sh(returnStdout: true, script: 'echo 0.0.1')
-
+        entityGuid = 'MTE2Nj*****************************'
     }
 
     stages {
-        stage('Env Variables') {
+        stage('Check env') {
             steps {
                 sh "printenv"
-            }
-        }
-        stage('Hello') {
-            steps {
-                echo 'Hello World'
-            }
-        }
-        stage('Test') {
-            steps {
-                build 'test'
             }
         }
         stage('Post to NR') {
             steps {
                 script {
-                    step([$class: 'NewRelicDeploymentNotifier', notifications: [[apiKey: '4', applicationId: '', changelog: '', commit: '', deeplink: 'http://localhost:8080/job/PipelineV2/configure', deploymentType: 'BLUE_GREEN', description: '', entityGuid: 'MTE2NjAxMzJ8QVBNfEFQUExJQ0FUSU9OfDEyMDk1MjY5', groupId: '', revision: '', timestamp: '', user: 'jenkins', version: '1']]])
+                    step([$class: 'NewRelicDeploymentNotifier', 
+                    notifications: [[
+                        apiKey: '4', 
+                        applicationId: '', 
+                        changelog: '', 
+                        commit: '', 
+                        deeplink: 'http://localhost:8080/job/PipelineV2/configure', 
+                        deploymentType: 'BLUE_GREEN', description: '', 
+                        entityGuid: "${entityGuid}", groupId: '', revision: '', timestamp: '', user: 'jenkins', version: '1']
+                        ]])
                 }
             }
         }
